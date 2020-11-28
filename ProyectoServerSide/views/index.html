@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{usuario}}</title>
+    <link rel="stylesheet" href="/public/estilos.css">
+</head>
+<body>
+
+        {% if logeado and admin %}
+            <h1>Bienvenido {{usuario}}</h1> 
+            <a href="/add">Administrar libros</a>
+            <h2><a href="/logout">Logout</a></h2>
+        {% elif logeado %}
+            <h1>Bienvenido {{usuario}}</h1> 
+            
+            <h2><a href="/logout">Logout</a></h2>
+        {% else %}
+            <h1>Login</h1>    
+            <form action="/login" method="post">
+            <label>Usuario</label>
+            <input type="text" name="usuario" placeholder="Usuario..." required>
+            <label>Password</label>
+            <input type="password" name="contrasenia" placeholder="Password..." required>
+            <input type="submit" value="Login">
+            </form>
+        {% endif %}    
+</body>
+</html>
