@@ -17,23 +17,21 @@ app.use(session({
 const path = require('path');
 app.use('/public', express.static(path.join(__dirname + '/public')));
 
-nunjucks.configure('views', {
+nunjucks.configure(path.join(__dirname + '/views/'), {
     autoescape: false,
     express: app
-  });
+});
 
 const MongoClient = require('mongodb').MongoClient;
 const MONGO_URL = 'mongodb+srv://dbuser:dbuserp455w0rd!@cluster0.3ryhk.mongodb.net/tv?retryWrites=true&w=majority/restapi';
 
- 
-//Index
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + '/views/');
+    res.status(200).render('index.html');
 });
 
 app.all('/login', function (req, res) {
     if (!req.body.usuario || !req.body.contrasenia) {
-        res.send('No se ha podido hacer el login');    
+        res.send('Login failed');    
 } 
 else {
 
@@ -56,15 +54,22 @@ else {
 }
     
 });
-app.get('/books/IDpublisher', (req, res)=>{	  
-    MongoClient.connect(MONGO_URL,{ useUnifiedTopology: true }, (err, db) => {  
-        const dbo = db.db("restapi");         
-        dbo.collection("libros").find({"id":req.params.IDpublisher}).toArray()
-          .then((data) => {      
-            res.render('books.html',{data:data});
-          }) 
-        })
-      });
+
+      app.get('/book/:isbn', (req, res)=>{	  
+        MongoClient.connect(MONGO_URL,{ useUnifiedTopology: true }, (err, db) => {  
+        const dbo = db.db("restapi"); 
+           
+        dbo.collection("libros").findOne({"isbn":req.params.isbn},function(err, data) {   	
+            if (data){     
+                res.status(200).render('book.html',{title:data.title,authors:data.authors,publishedDate:data.publishedDate,country:data.country,description:data.description,pageCount:data.pageCount}
+                );	
+            }else{
+                res.status(404).send(`<p>FAIL</p>`)
+    
+            }    		
+          });
+      });	
+      });	
  
 app.get('/logout', function (req, res) {
      req.session.destroy();
@@ -73,17 +78,39 @@ app.get('/logout', function (req, res) {
  
 
 app.post('/add', (req, res)=>{
+    var autores = [];
+   if(req.body.authors1){
+       autores.push(req.body.authors1)
+       if(req.body.authors2){
+           autores.push(req.body.authors2)
+           if(req.body.authors3){
+               autores.push(req.body.authors3)
+               if(req.body.authors4){
+                   autores.push(req.body.authors4)
+                       if(req.body.authors5){
+                           autores.push(req.body.authors5)
+                       }
+                   
+               }
+           }    
+           
+       }
+   }
+   var fecha = new Date(req.body.publishedDate)
     MongoClient.connect(MONGO_URL,{ useUnifiedTopology: true }, (err, db) => {  
-    const dbo = db.db("libros")
-    
+    const dbo = db.db("restapi")
+    console.log(autores);
+    console.log(req.body);
     dbo.collection("libros").insertOne(
         {   
-            isbm: parseInt(req.body.isbm),
+            isbn: req.body.isbn,
             title: req.body.title,
-            authors: req.body.authors,
-            publishedDate: req.body.publishedDate,
+            authors: autores,
+            publishedDate: fecha ,
             country: req.body.country,
-            editorial: req.body.editorial
+            IDpublisher: req.body.IDpublisher,
+            description : req.body.description,
+            pageCount: req.body.pageCount,
             
         },
         function (err, res) {
@@ -97,7 +124,33 @@ app.post('/add', (req, res)=>{
     })
 }) 
 app.get('/add', function (req, res) {
-    req.session.destroy();
-    res.render('add.html', )
-});   
+    var input = ``
+    var fecha =  new Date()
+    var varf = fecha.getFullYear()
+    MongoClient.connect(MONGO_URL,{ useUnifiedTopology: true }, (err, db) => {  
+        const dbo = db.db("restapi");
+        var editoriales = ""; 
+        dbo.collection("publisher").find({}).toArray()
+        .then((data) => { 
+            console.log(data)
+            for(editorial of data){
+                editoriales += `<option value="${editorial.id}">${editorial.publisher}</option>`;
+            } 
+         res.status(200).render('add.html',{option:editoriales,fecha:varf});
+        }) 
+      })
+   
+});  
+app.get('/buscador', (req, res)=>{	  
+    //Obtenemos el valor del término de búsqueda
+    var termino = req.query.busqueda;  
+    // Creamos la expresión regular para poder verificar que contenga el término el nombre en la base de datos. La i significa no sensible a may/min
+    var expresiontermino = new RegExp(termino,"i");
+    MongoClient.connect(MONGO_URL,{ useUnifiedTopology: true }, (err, db) => {  
+    const dbo = db.db("restapi");    
+    dbo.collection("libros").find({"title":{$regex: expresiontermino }}).toArray(function(err, data) {	      
+        res.render('resultado.html',{logeado:req.session.login, admin:req.session.admin,termino:termino,data:data});
+    });
+});	
+});	 
 app.listen(8080);

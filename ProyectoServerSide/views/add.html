@@ -15,22 +15,49 @@
         <h1> Register a book</h1>
         <h2>Hi {{user}}</h2>
         <form method="POST" action="/add">
-            <label for="isbm">ISBN</label>
-            <input type="number" name="ismb" placeholder="ISBN.." min=""required>
+            <label for="isbn">ISBN</label>
+            <input type="number" name="isbn" placeholder="ISBN.." min=""required>
+            <label for="pageCount">pageCount</label>
+            <input type="number" name="pageCount" placeholder="pageCount.." min=""required>
             <label for="title">Title</label>
             <input type="text" name="title" placeholder="Title.." required>
             <label for="authors">Author</label>
-            <input type="text" name="authors" placeholder="Author.." required>
+            <span>cuantos autores?</span>
+            <select name="" id="cantidad">
+                <option value="0">1</option>
+                <option value="1">2</option>
+                <option value="2">3</option>
+                <option value="3">4</option>
+                <option value="4">5</option> 
+            </select>
+            <input type="button" value="agregar" onclick="autor()"/>
+             <div id="autores">
+             </div>
             <label for="publishedDate">Year</label>
-            <input type="number" name="publishedDate" placeholder="Year.." min=""required>
+            <input type="date"name="publishedDate" min="1500"max={{fecha}} required >
             <label for="country">Country</label>
             <input type="text" name="country" placeholder="country.." required>
-            <label for="editorial">Editorial</label>
-            <input type="text" name="editorial" placeholder="editorial.." required>
-           
+            <select name="IDpublisher">
+                {{option}}
+            </select>
+            <input type="text" name="description" placeholder="description.." required>
             <input type="submit" value="Agregar"> 
         </form>
         <p><a href='/books/IDpublisher'>All the books</a></p>
         <p><a href='/'>Logout</a></p>
     </div>
 </body>
+<script>
+    function autor(){
+
+        document.getElementById("autores").innerHTML = "";
+        var valor= document.getElementById("cantidad").value;
+        var array =[1,2,3,4,5];
+        for( i=0;i<=valor;i++ ){
+           
+                document.getElementById("autores").insertAdjacentHTML("afterbegin",`<input type="text" name="authors${i+1}" placeholder="Author.." required>`)
+            
+        }
+    }
+</script>
+</html>

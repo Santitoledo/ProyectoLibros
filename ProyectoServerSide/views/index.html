@@ -9,17 +9,19 @@
 <body>
 
         {% if logeado and admin %}
-            <h1>Bienvenido {{usuario}}</h1> 
-            <a href="/add">Administrar libros</a>
+        {% include "header.html" %}
+            <h1>Welcome {{usuario}}</h1> 
+            <a href="/add">Manage books</a>
             <h2><a href="/logout">Logout</a></h2>
         {% elif logeado %}
-            <h1>Bienvenido {{usuario}}</h1> 
+        {% include "header.html" %}
+            <h1>Welcome {{usuario}}</h1> 
             
             <h2><a href="/logout">Logout</a></h2>
         {% else %}
             <h1>Login</h1>    
             <form action="/login" method="post">
-            <label>Usuario</label>
+            <label>User</label>
             <input type="text" name="usuario" placeholder="Usuario..." required>
             <label>Password</label>
             <input type="password" name="contrasenia" placeholder="Password..." required>
