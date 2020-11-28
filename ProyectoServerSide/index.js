@@ -31,7 +31,6 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + '/views/');
 });
 
-
 app.all('/login', function (req, res) {
     if (!req.body.usuario || !req.body.contrasenia) {
         res.send('No se ha podido hacer el login');    
@@ -57,6 +56,15 @@ else {
 }
     
 });
+app.get('/books/IDpublisher', (req, res)=>{	  
+    MongoClient.connect(MONGO_URL,{ useUnifiedTopology: true }, (err, db) => {  
+        const dbo = db.db("restapi");         
+        dbo.collection("libros").find({"id":req.params.IDpublisher}).toArray()
+          .then((data) => {      
+            res.render('books.html',{data:data});
+          }) 
+        })
+      });
  
 app.get('/logout', function (req, res) {
      req.session.destroy();

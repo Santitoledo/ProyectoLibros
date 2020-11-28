@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>Books</h1>
+    </header>
+    <nav>
+        <h1></h1>
+        <ul>
+            {% for book in data %}
+                <li><a href="/books/{{book.IDpublisher}}">{{ book.title }}</a></li>                
+            {% endfor %}            
+        </ul>
+    </nav>
+    
+    <p><a href='/'>Return home</a></p>
+</body>
+</html>
