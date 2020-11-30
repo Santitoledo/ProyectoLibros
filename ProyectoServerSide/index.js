@@ -23,7 +23,7 @@ nunjucks.configure(path.join(__dirname + '/views/'), {
 });
 
 const MongoClient = require('mongodb').MongoClient;
-const MONGO_URL = 'mongodb+srv://dbuser:dbuserp455w0rd!@cluster0.3ryhk.mongodb.net/tv?retryWrites=true&w=majority/restapi';
+const MONGO_URL = 'mongodb://localhost:27017/restapi';
 
 app.get("/", (req, res) => {
     res.status(200).render('index.html');
@@ -124,7 +124,7 @@ app.post('/add', (req, res)=>{
     })
 }) 
 app.get('/add', function (req, res) {
-    var input = ``
+    
     var fecha =  new Date()
     var varf = fecha.getFullYear()
     MongoClient.connect(MONGO_URL,{ useUnifiedTopology: true }, (err, db) => {  
@@ -132,7 +132,7 @@ app.get('/add', function (req, res) {
         var editoriales = ""; 
         dbo.collection("publisher").find({}).toArray()
         .then((data) => { 
-            console.log(data)
+           // console.log(data)
             for(editorial of data){
                 editoriales += `<option value="${editorial.id}">${editorial.publisher}</option>`;
             } 

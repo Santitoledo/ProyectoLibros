@@ -13,16 +13,15 @@
 <body>
     <div id="cont">
         <h1> Register a book</h1>
-        <h2>Hi {{user}}</h2>
         <form method="POST" action="/add">
             <label for="isbn">ISBN</label>
             <input type="number" name="isbn" placeholder="ISBN.." min=""required>
             <label for="pageCount">pageCount</label>
-            <input type="number" name="pageCount" placeholder="pageCount.." min=""required>
+            <input type="number" name="pageCount" placeholder="pageCount.." required>
             <label for="title">Title</label>
             <input type="text" name="title" placeholder="Title.." required>
             <label for="authors">Author</label>
-            <span>cuantos autores?</span>
+            <span>How many authors?</span>
             <select name="" id="cantidad">
                 <option value="0">1</option>
                 <option value="1">2</option>
