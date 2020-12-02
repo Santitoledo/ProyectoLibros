@@ -7,7 +7,7 @@ const params = useParams();
 const lista = useFetch("https://api-book-gnu4jcl16.vercel.app/api/editorial/"+params.editorial)
 return (
     <>
-    <h1><strong><u>Libros</u></strong></h1>
+    <h1><strong><u>Books</u></strong></h1>
     <ul>
       {lista.map((libro, i) => (
           <Link to={"/libro/" + libro.title} key={i}>
