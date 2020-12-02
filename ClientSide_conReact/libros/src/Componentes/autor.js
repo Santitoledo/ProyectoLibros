@@ -32,7 +32,7 @@ return (
   
   {Datos.authors?
   <>
-  {Datos.authors.length>1?<h3>Authors:</h3>:<h3>Autor:</h3>}
+  {Datos.authors.length>1?<h3>Authors:</h3>:<h3>Author:</h3>}
   <ul>
   {Datos.authors.map((au,i)=><li key={i}>{au}</li>)}
   </ul>
