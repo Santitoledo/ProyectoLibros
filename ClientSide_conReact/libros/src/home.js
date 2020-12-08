@@ -36,7 +36,7 @@ const [search, SetSearch] = useState("");
               ))}{" "}
           </ul>
         ) : null}
-    <h3 id="title3"><strong><u>Publishers</u>:</strong></h3>
+    <h3 id="title3"><strong><u>Publishers.</u>:</strong></h3>
     {Publisher.map((editorial,i)=>
     <li key={i}><a href={"/editorial/"+editorial.publisher}>{editorial.publisher}</a></li>
     )}
